@@ -30,11 +30,11 @@ bin/magento cache:flush
 
 Use this installation option if you want to require the OwlCarousel module with Composer. This is typically the case if you are doing active development on the module, or if you want to use Composer to manage future module upgrades.
  
-Run the following commands from the root directory of your Magento installation:
+Run the following commands from the root directory of your Magento installation. (Note that for development, you should use "dev-develop" instead of "*" for the version constraint.)
 
 ```bash
 composer config repositories.classyllama/owlcarousel git git@github.com:classyllama/ClassyLlama_OwlCarousel.git
-composer require classyllama/module-owlcarousel:dev-develop
+composer require classyllama/module-owlcarousel:*
 bin/magento module:enable --clear-static-content ClassyLlama_OwlCarousel
 bin/magento setup:upgrade
 bin/magento cache:flush
