@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2016 Classy Llama Studios, LLC.
+ * See included LICENSE file for details.
+ */
+
 var config = {
     map: {
         '*': {
