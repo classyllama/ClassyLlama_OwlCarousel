@@ -1,20 +1,21 @@
 /**
- * Owl Carousel v2.0.0-beta.3
- * Copyright 2013-2016 Smashing Boxes
- * Licensed under MIT (https://github.com/smashingboxes/OwlCarousel2/blob/master/LICENSE)
+ * Owl Carousel v2.2.0
+ * Copyright 2013-2016 David Deutsch
+ * Licensed under MIT (https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE)
  */
 !(function(root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		define(['jquery'], function($) {
-			return factory(root, $);
-		});
-	} else if (typeof exports === 'object') {
-		factory(root, require('jquery'));
-	} else {
-		factory(root, root.jQuery || root.Zepto);
-	}
+    if (typeof define === 'function' && define.amd) {
+        define(['jquery'], function($) {
+            return factory(root, $);
+        });
+    } else if (typeof exports === 'object') {
+        factory(root, require('jquery'));
+    } else {
+        factory(root, root.jQuery || root.Zepto);
+    }
 })(typeof window !== 'undefined' ? window : this, function(window, $) {
-	'use strict';
+    'use strict';
+
 
 	/**
 	 * Creates a carousel.
@@ -164,7 +165,7 @@
 
 		$.each(Owl.Plugins, $.proxy(function(key, plugin) {
 			this._plugins[key.charAt(0).toLowerCase() + key.slice(1)]
-					= new plugin(this);
+				= new plugin(this);
 		}, this));
 
 		$.each(Owl.Workers, $.proxy(function(priority, worker) {
@@ -282,13 +283,13 @@
 		filter: [ 'width', 'items', 'settings' ],
 		run: function(cache) {
 			var margin = this.settings.margin || '',
-					grid = !this.settings.autoWidth,
-					rtl = this.settings.rtl,
-					css = {
-						'width': 'auto',
-						'margin-left': rtl ? margin : '',
-						'margin-right': rtl ? '' : margin
-					};
+				grid = !this.settings.autoWidth,
+				rtl = this.settings.rtl,
+				css = {
+					'width': 'auto',
+					'margin-left': rtl ? margin : '',
+					'margin-right': rtl ? '' : margin
+				};
 
 			!grid && this.$stage.children().css(css);
 
@@ -298,10 +299,10 @@
 		filter: [ 'width', 'items', 'settings' ],
 		run: function(cache) {
 			var width = (this.width() / this.settings.items).toFixed(3) - this.settings.margin,
-					merge = null,
-					iterator = this._items.length,
-					grid = !this.settings.autoWidth,
-					widths = [];
+				merge = null,
+				iterator = this._items.length,
+				grid = !this.settings.autoWidth,
+				widths = [];
 
 			cache.items = {
 				merge: false,
@@ -323,17 +324,19 @@
 		filter: [ 'items', 'settings' ],
 		run: function() {
 			var clones = [],
-					items = this._items,
-					settings = this.settings,
-					view = Math.max(settings.items * 2, 4),
-					size = Math.ceil(items.length / 2) * 2,
-					repeat = settings.loop && items.length ? settings.rewind ? view : Math.max(view, size) : 0,
-					append = '',
-					prepend = '';
+				items = this._items,
+				settings = this.settings,
+				// TODO: Should be computed from number of min width items in stage
+				view = Math.max(settings.items * 2, 4),
+				size = Math.ceil(items.length / 2) * 2,
+				repeat = settings.loop && items.length ? settings.rewind ? view : Math.max(view, size) : 0,
+				append = '',
+				prepend = '';
 
 			repeat /= 2;
 
 			while (repeat--) {
+				// Switch to only using appended clones
 				clones.push(this.normalize(clones.length / 2, true));
 				append = append + items[clones[clones.length - 1]][0].outerHTML;
 				clones.push(this.normalize(items.length - 1 - (clones.length - 1) / 2, true));
@@ -349,11 +352,11 @@
 		filter: [ 'width', 'items', 'settings' ],
 		run: function() {
 			var rtl = this.settings.rtl ? 1 : -1,
-					size = this._clones.length + this._items.length,
-					iterator = -1,
-					previous = 0,
-					current = 0,
-					coordinates = [];
+				size = this._clones.length + this._items.length,
+				iterator = -1,
+				previous = 0,
+				current = 0,
+				coordinates = [];
 
 			while (++iterator < size) {
 				previous = coordinates[iterator - 1] || 0;
@@ -367,12 +370,12 @@
 		filter: [ 'width', 'items', 'settings' ],
 		run: function() {
 			var padding = this.settings.stagePadding,
-					coordinates = this._coordinates,
-					css = {
-						'width': Math.ceil(Math.abs(coordinates[coordinates.length - 1])) + padding * 2,
-						'padding-left': padding || '',
-						'padding-right': padding || ''
-					};
+				coordinates = this._coordinates,
+				css = {
+					'width': Math.ceil(Math.abs(coordinates[coordinates.length - 1])) + padding * 2,
+					'padding-left': padding || '',
+					'padding-right': padding || ''
+				};
 
 			this.$stage.css(css);
 		}
@@ -380,8 +383,8 @@
 		filter: [ 'width', 'items', 'settings' ],
 		run: function(cache) {
 			var iterator = this._coordinates.length,
-					grid = !this.settings.autoWidth,
-					items = this.$stage.children();
+				grid = !this.settings.autoWidth,
+				items = this.$stage.children();
 
 			if (grid && cache.items.merge) {
 				while (iterator--) {
@@ -414,17 +417,17 @@
 		filter: [ 'width', 'position', 'items', 'settings' ],
 		run: function() {
 			var rtl = this.settings.rtl ? 1 : -1,
-					padding = this.settings.stagePadding * 2,
-					begin = this.coordinates(this.current()) + padding,
-					end = begin + this.width() * rtl,
-					inner, outer, matches = [], i, n;
+				padding = this.settings.stagePadding * 2,
+				begin = this.coordinates(this.current()) + padding,
+				end = begin + this.width() * rtl,
+				inner, outer, matches = [], i, n;
 
 			for (i = 0, n = this._coordinates.length; i < n; i++) {
 				inner = this._coordinates[i - 1] || 0;
 				outer = Math.abs(this._coordinates[i]) + padding * rtl;
 
 				if ((this.op(inner, '<=', begin) && (this.op(inner, '>', end)))
-						|| (this.op(outer, '<', begin) && this.op(outer, '>', end))) {
+					|| (this.op(outer, '<', begin) && this.op(outer, '>', end))) {
 					matches.push(i);
 				}
 			}
@@ -464,7 +467,7 @@
 
 		// create stage
 		this.$stage = $('<' + this.settings.stageElement + ' class="' + this.settings.stageClass + '"/>')
-				.wrap('<div class="' + this.settings.stageOuterClass + '"/>');
+			.wrap('<div class="' + this.settings.stageOuterClass + '"/>');
 
 		// append stage
 		this.$element.append(this.$stage.parent());
@@ -482,8 +485,8 @@
 		}
 
 		this.$element
-				.removeClass(this.options.loadingClass)
-				.addClass(this.options.loadedClass);
+			.removeClass(this.options.loadingClass)
+			.addClass(this.options.loadedClass);
 
 		// register event handlers
 		this.registerEventHandlers();
@@ -500,9 +503,9 @@
 	 */
 	Owl.prototype.setup = function() {
 		var viewport = this.viewport(),
-				overwrites = this.options.responsive,
-				match = -1,
-				settings = null;
+			overwrites = this.options.responsive,
+			match = -1,
+			settings = null;
 
 		if (!overwrites) {
 			settings = $.extend({}, this.options);
@@ -514,23 +517,24 @@
 			});
 
 			settings = $.extend({}, this.options, overwrites[match]);
+			if (typeof settings.stagePadding === 'function') {
+				settings.stagePadding = settings.stagePadding();
+			}
 			delete settings.responsive;
 
 			// responsive class
 			if (settings.responsiveClass) {
 				this.$element.attr('class',
-						this.$element.attr('class').replace(new RegExp('(' + this.options.responsiveClass + '-)\\S+\\s', 'g'), '$1' + match)
+					this.$element.attr('class').replace(new RegExp('(' + this.options.responsiveClass + '-)\\S+\\s', 'g'), '$1' + match)
 				);
 			}
 		}
 
-		if (this.settings === null || this._breakpoint !== match) {
-			this.trigger('change', { property: { name: 'settings', value: settings } });
-			this._breakpoint = match;
-			this.settings = settings;
-			this.invalidate('settings');
-			this.trigger('changed', { property: { name: 'settings', value: this.settings } });
-		}
+		this.trigger('change', { property: { name: 'settings', value: settings } });
+		this._breakpoint = match;
+		this.settings = settings;
+		this.invalidate('settings');
+		this.trigger('changed', { property: { name: 'settings', value: this.settings } });
 	};
 
 	/**
@@ -555,7 +559,7 @@
 
 		if (!event.data) {
 			event.data = $('<' + this.settings.itemElement + '/>')
-					.addClass(this.options.itemClass).append(item)
+				.addClass(this.options.itemClass).append(item)
 		}
 
 		this.trigger('prepared', { content: event.data });
@@ -569,9 +573,9 @@
 	 */
 	Owl.prototype.update = function() {
 		var i = 0,
-				n = this._pipe.length,
-				filter = $.proxy(function(p) { return this[p] }, this._invalidated),
-				cache = {};
+			n = this._pipe.length,
+			filter = $.proxy(function(p) { return this[p] }, this._invalidated),
+			cache = {};
 
 		while (i < n) {
 			if (this._invalidated.all || $.grep(this._pipe[i].filter, filter).length > 0) {
@@ -716,8 +720,8 @@
 			stage = this.$stage.position();
 			stage = {
 				x: this.settings.rtl ?
-				stage.left + this.$stage.width() - this.width() + this.settings.margin :
-						stage.left,
+					stage.left + this.$stage.width() - this.width() + this.settings.margin :
+					stage.left,
 				y: stage.top
 			};
 		}
@@ -763,10 +767,10 @@
 	 */
 	Owl.prototype.onDragMove = function(event) {
 		var minimum = null,
-				maximum = null,
-				pull = null,
-				delta = this.difference(this._drag.pointer, this.pointer(event)),
-				stage = this.difference(this._drag.stage.start, delta);
+			maximum = null,
+			pull = null,
+			delta = this.difference(this._drag.pointer, this.pointer(event)),
+			stage = this.difference(this._drag.stage.start, delta);
 
 		if (!this.is('dragging')) {
 			return;
@@ -799,8 +803,8 @@
 	 */
 	Owl.prototype.onDragEnd = function(event) {
 		var delta = this.difference(this._drag.pointer, this.pointer(event)),
-				stage = this._drag.stage.current,
-				direction = delta.x > 0 ^ this.settings.rtl ? 'left' : 'right';
+			stage = this._drag.stage.current,
+			direction = delta.x > 0 ^ this.settings.rtl ? 'left' : 'right';
 
 		$(document).off('.owl.core');
 
@@ -837,17 +841,22 @@
 	 */
 	Owl.prototype.closest = function(coordinate, direction) {
 		var position = -1,
-				pull = 30,
-				width = this.width(),
-				coordinates = this.coordinates();
+			pull = 30,
+			width = this.width(),
+			coordinates = this.coordinates();
 
 		if (!this.settings.freeDrag) {
 			// check closest item
 			$.each(coordinates, $.proxy(function(index, value) {
-				if (coordinate > value - pull && coordinate < value + pull) {
+				// on a left pull, check on current index
+				if (direction === 'left' && coordinate > value - pull && coordinate < value + pull) {
 					position = index;
+				// on a right pull, check on previous index
+				// to do so, subtract width from value and set position = index + 1
+				} else if (direction === 'right' && coordinate > value - width - pull && coordinate < value - width + pull) {
+					position = index + 1;
 				} else if (this.op(coordinate, '<', value)
-						&& this.op(coordinate, '>', coordinates[index + 1] || value - width)) {
+					&& this.op(coordinate, '>', coordinates[index + 1] || value - width)) {
 					position = direction === 'left' ? index + 1 : index;
 				}
 				return position === -1;
@@ -985,7 +994,7 @@
 	 */
 	Owl.prototype.normalize = function(position, relative) {
 		var n = this._items.length,
-				m = relative ? 0 : this._clones.length;
+			m = relative ? 0 : this._clones.length;
 
 		if (!this.isNumeric(position) || n < 1) {
 			position = undefined;
@@ -1015,18 +1024,24 @@
 	 */
 	Owl.prototype.maximum = function(relative) {
 		var settings = this.settings,
-				maximum = this._coordinates.length,
-				boundary = Math.abs(this._coordinates[maximum - 1]) - this._width,
-				i = -1, j;
+			maximum = this._coordinates.length,
+			iterator,
+			reciprocalItemsWidth,
+			elementWidth;
 
 		if (settings.loop) {
 			maximum = this._clones.length / 2 + this._items.length - 1;
 		} else if (settings.autoWidth || settings.merge) {
-			// binary search
-			while (maximum - i > 1) {
-				Math.abs(this._coordinates[j = maximum + i >> 1]) < boundary
-						? i = j : maximum = j;
+			iterator = this._items.length;
+			reciprocalItemsWidth = this._items[--iterator].width();
+			elementWidth = this.$element.width();
+			while (iterator--) {
+				reciprocalItemsWidth += this._items[iterator].width() + this.settings.margin;
+				if (reciprocalItemsWidth > elementWidth) {
+					break;
+				}
 			}
+			maximum = iterator + 1;
 		} else if (settings.center) {
 			maximum = this._items.length - 1;
 		} else {
@@ -1088,8 +1103,8 @@
 	 */
 	Owl.prototype.clones = function(position) {
 		var odd = this._clones.length / 2,
-				even = odd + this._items.length,
-				map = function(index) { return index % 2 === 0 ? even + index / 2 : odd - (index + 1) / 2 };
+			even = odd + this._items.length,
+			map = function(index) { return index % 2 === 0 ? even + index / 2 : odd - (index + 1) / 2 };
 
 		if (position === undefined) {
 			return $.map(this._clones, function(v, i) { return map(i) });
@@ -1121,8 +1136,8 @@
 	 */
 	Owl.prototype.coordinates = function(position) {
 		var multiplier = 1,
-				newPosition = position - 1,
-				coordinate;
+			newPosition = position - 1,
+			coordinate;
 
 		if (position === undefined) {
 			return $.map(this._coordinates, $.proxy(function(coordinate, index) {
@@ -1142,6 +1157,8 @@
 			coordinate = this._coordinates[newPosition] || 0;
 		}
 
+		coordinate = Math.ceil(coordinate);
+
 		return coordinate;
 	};
 
@@ -1154,6 +1171,10 @@
 	 * @returns {Number} - The time in milliseconds for the translation.
 	 */
 	Owl.prototype.duration = function(from, to, factor) {
+		if (factor === 0) {
+			return 0;
+		}
+
 		return Math.min(Math.max(Math.abs(to - from), 1), 6) * Math.abs((factor || this.settings.smartSpeed));
 	};
 
@@ -1165,12 +1186,12 @@
 	 */
 	Owl.prototype.to = function(position, speed) {
 		var current = this.current(),
-				revert = null,
-				distance = position - this.relative(current),
-				direction = (distance > 0) - (distance < 0),
-				items = this._items.length,
-				minimum = this.minimum(),
-				maximum = this.maximum();
+			revert = null,
+			distance = position - this.relative(current),
+			direction = (distance > 0) - (distance < 0),
+			items = this._items.length,
+			minimum = this.minimum(),
+			maximum = this.maximum();
 
 		if (this.settings.loop) {
 			if (!this.settings.rewind && Math.abs(distance) > items / 2) {
@@ -1270,7 +1291,7 @@
 		this._items = [];
 
 		if (content) {
-			content = (content instanceof $) ? content : $(content);
+			content = (content instanceof jQuery) ? content : $(content);
 		}
 
 		if (this.settings.nestedItemSelector) {
@@ -1283,7 +1304,7 @@
 			item = this.prepare(item);
 			this.$stage.append(item);
 			this._items.push(item);
-			this._mergers.push(item.find('[data-merge]').andSelf('[data-merge]').attr('data-merge') * 1 || 1);
+			this._mergers.push(item.find('[data-merge]').addBack('[data-merge]').attr('data-merge') * 1 || 1);
 		}, this));
 
 		this.reset(this.isNumeric(this.settings.startPosition) ? this.settings.startPosition : 0);
@@ -1302,7 +1323,7 @@
 		var current = this.relative(this._current);
 
 		position = position === undefined ? this._items.length : this.normalize(position, true);
-		content = content instanceof $ ? content : $(content);
+		content = content instanceof jQuery ? content : $(content);
 
 		this.trigger('add', { content: content, position: position });
 
@@ -1312,11 +1333,11 @@
 			this._items.length === 0 && this.$stage.append(content);
 			this._items.length !== 0 && this._items[position - 1].after(content);
 			this._items.push(content);
-			this._mergers.push(content.find('[data-merge]').andSelf('[data-merge]').attr('data-merge') * 1 || 1);
+			this._mergers.push(content.find('[data-merge]').addBack('[data-merge]').attr('data-merge') * 1 || 1);
 		} else {
 			this._items[position].before(content);
 			this._items.splice(position, 0, content);
-			this._mergers.splice(position, 0, content.find('[data-merge]').andSelf('[data-merge]').attr('data-merge') * 1 || 1);
+			this._mergers.splice(position, 0, content.find('[data-merge]').addBack('[data-merge]').attr('data-merge') * 1 || 1);
 		}
 
 		this._items[current] && this.reset(this._items[current].index());
@@ -1394,14 +1415,14 @@
 		this.$stage.children().unwrap();
 
 		this.$element
-				.removeClass(this.options.refreshClass)
-				.removeClass(this.options.loadingClass)
-				.removeClass(this.options.loadedClass)
-				.removeClass(this.options.rtlClass)
-				.removeClass(this.options.dragClass)
-				.removeClass(this.options.grabClass)
-				.attr('class', this.$element.attr('class').replace(new RegExp(this.options.responsiveClass + '-\\S+\\s', 'g'), ''))
-				.removeData('owl.carousel');
+			.removeClass(this.options.refreshClass)
+			.removeClass(this.options.loadingClass)
+			.removeClass(this.options.loadedClass)
+			.removeClass(this.options.rtlClass)
+			.removeClass(this.options.dragClass)
+			.removeClass(this.options.grabClass)
+			.attr('class', this.$element.attr('class').replace(new RegExp(this.options.responsiveClass + '-\\S+\\s', 'g'), ''))
+			.removeData('owl.carousel');
 	};
 
 	/**
@@ -1474,11 +1495,11 @@
 		var status = {
 			item: { count: this._items.length, index: this.current() }
 		}, handler = $.camelCase(
-				$.grep([ 'on', name, namespace ], function(v) { return v })
-						.join('-').toLowerCase()
+			$.grep([ 'on', name, namespace ], function(v) { return v })
+				.join('-').toLowerCase()
 		), event = $.Event(
-				[ name, 'owl', namespace || 'carousel' ].join('.').toLowerCase(),
-				$.extend({ relatedTarget: this }, status, data)
+			[ name, 'owl', namespace || 'carousel' ].join('.').toLowerCase(),
+			$.extend({ relatedTarget: this }, status, data)
 		);
 
 		if (!this._supress[name]) {
@@ -1592,7 +1613,7 @@
 		event = event.originalEvent || event || window.event;
 
 		event = event.touches && event.touches.length ?
-				event.touches[0] : event.changedTouches && event.changedTouches.length ?
+			event.touches[0] : event.changedTouches && event.changedTouches.length ?
 				event.changedTouches[0] : event;
 
 		if (event.pageX) {
@@ -1641,7 +1662,7 @@
 
 		return this.each(function() {
 			var $this = $(this),
-					data = $this.data('owl.carousel');
+				data = $this.data('owl.carousel');
 
 			if (!data) {
 				data = new Owl(this, typeof option == 'object' && option);
@@ -1672,6 +1693,7 @@
 	 * @public
 	 */
 	$.fn.owlCarousel.Constructor = Owl;
+
 
 	/**
 	 * Creates the auto refresh plugin.
@@ -1774,6 +1796,7 @@
 
 	$.fn.owlCarousel.Constructor.Plugins.AutoRefresh = AutoRefresh;
 
+
 	/**
 	 * Creates the lazy plugin.
 	 * @class The Lazy Plugin
@@ -1801,7 +1824,7 @@
 		 * @type {Object}
 		 */
 		this._handlers = {
-			'initialized.owl.carousel change.owl.carousel': $.proxy(function(e) {
+			'initialized.owl.carousel change.owl.carousel resized.owl.carousel': $.proxy(function(e) {
 				if (!e.namespace) {
 					return;
 				}
@@ -1812,11 +1835,11 @@
 
 				if ((e.property && e.property.name == 'position') || e.type == 'initialized') {
 					var settings = this._core.settings,
-							n = (settings.center && Math.ceil(settings.items / 2) || settings.items),
-							i = ((settings.center && n * -1) || 0),
-							position = ((e.property && e.property.value) || this._core.current()) + i,
-							clones = this._core.clones().length,
-							load = $.proxy(function(i, v) { this.load(v) }, this);
+						n = (settings.center && Math.ceil(settings.items / 2) || settings.items),
+						i = ((settings.center && n * -1) || 0),
+						position = (e.property && e.property.value !== undefined ? e.property.value : this._core.current()) + i,
+						clones = this._core.clones().length,
+						load = $.proxy(function(i, v) { this.load(v) }, this);
 
 					while (i++ < n) {
 						this.load(clones / 2 + this._core.relative(position));
@@ -1832,7 +1855,7 @@
 
 		// register event handler
 		this._core.$element.on(this._handlers);
-	}
+	};
 
 	/**
 	 * Default options.
@@ -1840,7 +1863,7 @@
 	 */
 	Lazy.Defaults = {
 		lazyLoad: false
-	}
+	};
 
 	/**
 	 * Loads all resources of an item at the specified position.
@@ -1849,7 +1872,7 @@
 	 */
 	Lazy.prototype.load = function(position) {
 		var $item = this._core.$stage.children().eq(position),
-				$elements = $item && $item.find('.owl-lazy');
+			$elements = $item && $item.find('.owl-lazy');
 
 		if (!$elements || $.inArray($item.get(0), this._loaded) > -1) {
 			return;
@@ -1857,7 +1880,7 @@
 
 		$elements.each($.proxy(function(index, element) {
 			var $element = $(element), image,
-					url = (window.devicePixelRatio > 1 && $element.attr('data-src-retina')) || $element.attr('data-src');
+				url = (window.devicePixelRatio > 1 && $element.attr('data-src-retina')) || $element.attr('data-src');
 
 			this._core.trigger('load', { element: $element, url: url }, 'lazy');
 
@@ -1880,7 +1903,7 @@
 		}, this));
 
 		this._loaded.push($item.get(0));
-	}
+	};
 
 	/**
 	 * Destroys the plugin.
@@ -1898,6 +1921,7 @@
 	};
 
 	$.fn.owlCarousel.Constructor.Plugins.Lazy = Lazy;
+
 
 	/**
 	 * Creates the auto height plugin.
@@ -1930,7 +1954,7 @@
 			}, this),
 			'loaded.owl.lazy': $.proxy(function(e) {
 				if (e.namespace && this._core.settings.autoHeight
-						&& e.element.closest('.' + this._core.settings.itemClass).index() === this._core.current()) {
+					&& e.element.closest('.' + this._core.settings.itemClass).index() === this._core.current()) {
 					this.update();
 				}
 			}, this)
@@ -1957,10 +1981,10 @@
 	 */
 	AutoHeight.prototype.update = function() {
 		var start = this._core._current,
-				end = start + this._core.settings.items,
-				visible = this._core.$stage.children().toArray().slice(start, end),
-				heights = [],
-				maxheight = 0;
+			end = start + this._core.settings.items,
+			visible = this._core.$stage.children().toArray().slice(start, end),
+			heights = [],
+			maxheight = 0;
 
 		$.each(visible, function(index, item) {
 			heights.push($(item).height());
@@ -1969,8 +1993,8 @@
 		maxheight = Math.max.apply(null, heights);
 
 		this._core.$stage.parent()
-				.height(maxheight)
-				.addClass(this._core.settings.autoHeightClass);
+			.height(maxheight)
+			.addClass(this._core.settings.autoHeightClass);
 	};
 
 	AutoHeight.prototype.destroy = function() {
@@ -1985,6 +2009,7 @@
 	};
 
 	$.fn.owlCarousel.Constructor.Plugins.AutoHeight = AutoHeight;
+
 
 	/**
 	 * Creates the video plugin.
@@ -2082,7 +2107,7 @@
 	 * @param {jQuery} item - The item containing the video.
 	 */
 	Video.prototype.fetch = function(target, item) {
-		var type = (function() {
+			var type = (function() {
 					if (target.attr('data-vimeo-id')) {
 						return 'vimeo';
 					} else if (target.attr('data-vzaar-id')) {
@@ -2099,16 +2124,16 @@
 		if (url) {
 
 			/*
-			 Parses the id's out of the following urls (and probably more):
-			 https://www.youtube.com/watch?v=:id
-			 https://youtu.be/:id
-			 https://vimeo.com/:id
-			 https://vimeo.com/channels/:channel/:id
-			 https://vimeo.com/groups/:group/videos/:id
-			 https://app.vzaar.com/videos/:id
+					Parses the id's out of the following urls (and probably more):
+					https://www.youtube.com/watch?v=:id
+					https://youtu.be/:id
+					https://vimeo.com/:id
+					https://vimeo.com/channels/:channel/:id
+					https://vimeo.com/groups/:group/videos/:id
+					https://app.vzaar.com/videos/:id
 
-			 Visual example: http://regexper.com/#(http%3A%7Chttps%3A%7C)%5C%2F%5C%2F(player.%7Cwww.%7Capp.)%3F(vimeo%5C.com%7Cyoutu(be%5C.com%7C%5C.be%7Cbe%5C.googleapis%5C.com)%7Cvzaar%5C.com)%5C%2F(video%5C%2F%7Cvideos%5C%2F%7Cembed%5C%2F%7Cchannels%5C%2F.%2B%5C%2F%7Cgroups%5C%2F.%2B%5C%2F%7Cwatch%5C%3Fv%3D%7Cv%5C%2F)%3F(%5BA-Za-z0-9._%25-%5D*)(%5C%26%5CS%2B)%3F
-			 */
+					Visual example: https://regexper.com/#(http%3A%7Chttps%3A%7C)%5C%2F%5C%2F(player.%7Cwww.%7Capp.)%3F(vimeo%5C.com%7Cyoutu(be%5C.com%7C%5C.be%7Cbe%5C.googleapis%5C.com)%7Cvzaar%5C.com)%5C%2F(video%5C%2F%7Cvideos%5C%2F%7Cembed%5C%2F%7Cchannels%5C%2F.%2B%5C%2F%7Cgroups%5C%2F.%2B%5C%2F%7Cwatch%5C%3Fv%3D%7Cv%5C%2F)%3F(%5BA-Za-z0-9._%25-%5D*)(%5C%26%5CS%2B)%3F
+			*/
 
 			id = url.match(/(http:|https:|)\/\/(player.|www.|app.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com)|vzaar\.com)\/(video\/|videos\/|embed\/|channels\/.+\/|groups\/.+\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
 
@@ -2147,24 +2172,24 @@
 	 */
 	Video.prototype.thumbnail = function(target, video) {
 		var tnLink,
-				icon,
-				path,
-				dimensions = video.width && video.height ? 'style="width:' + video.width + 'px;height:' + video.height + 'px;"' : '',
-				customTn = target.find('img'),
-				srcType = 'src',
-				lazyClass = '',
-				settings = this._core.settings,
-				create = function(path) {
-					icon = '<div class="owl-video-play-icon"></div>';
+			icon,
+			path,
+			dimensions = video.width && video.height ? 'style="width:' + video.width + 'px;height:' + video.height + 'px;"' : '',
+			customTn = target.find('img'),
+			srcType = 'src',
+			lazyClass = '',
+			settings = this._core.settings,
+			create = function(path) {
+				icon = '<div class="owl-video-play-icon"></div>';
 
-					if (settings.lazyLoad) {
-						tnLink = '<div class="owl-video-tn ' + lazyClass + '" ' + srcType + '="' + path + '"></div>';
-					} else {
-						tnLink = '<div class="owl-video-tn" style="opacity:1;background-image:url(' + path + ')"></div>';
-					}
-					target.after(tnLink);
-					target.after(icon);
-				};
+				if (settings.lazyLoad) {
+					tnLink = '<div class="owl-video-tn ' + lazyClass + '" ' + srcType + '="' + path + '"></div>';
+				} else {
+					tnLink = '<div class="owl-video-tn" style="opacity:1;background-image:url(' + path + ')"></div>';
+				}
+				target.after(tnLink);
+				target.after(icon);
+			};
 
 		// wrap video content into owl-video-wrapper div
 		target.wrap('<div class="owl-video-wrapper"' + dimensions + '></div>');
@@ -2229,11 +2254,11 @@
 	 */
 	Video.prototype.play = function(event) {
 		var target = $(event.target),
-				item = target.closest('.' + this._core.settings.itemClass),
-				video = this._videos[item.attr('data-video')],
-				width = video.width || '100%',
-				height = video.height || this._core.$stage.height(),
-				html;
+			item = target.closest('.' + this._core.settings.itemClass),
+			video = this._videos[item.attr('data-video')],
+			width = video.width || '100%',
+			height = video.height || this._core.$stage.height(),
+			html;
 
 		if (this._playing) {
 			return;
@@ -2248,15 +2273,15 @@
 
 		if (video.type === 'youtube') {
 			html = '<iframe width="' + width + '" height="' + height + '" src="//www.youtube.com/embed/' +
-					video.id + '?autoplay=1&v=' + video.id + '" frameborder="0" allowfullscreen></iframe>';
+				video.id + '?autoplay=1&v=' + video.id + '" frameborder="0" allowfullscreen></iframe>';
 		} else if (video.type === 'vimeo') {
 			html = '<iframe src="//player.vimeo.com/video/' + video.id +
-					'?autoplay=1" width="' + width + '" height="' + height +
-					'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+				'?autoplay=1" width="' + width + '" height="' + height +
+				'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
 		} else if (video.type === 'vzaar') {
 			html = '<iframe frameborder="0"' + 'height="' + height + '"' + 'width="' + width +
-					'" allowfullscreen mozallowfullscreen webkitAllowFullScreen ' +
-					'src="//view.vzaar.com/' + video.id + '/player?autoplay=true"></iframe>';
+				'" allowfullscreen mozallowfullscreen webkitAllowFullScreen ' +
+				'src="//view.vzaar.com/' + video.id + '/player?autoplay=true"></iframe>';
 		}
 
 		$('<div class="owl-video-frame">' + html + '</div>').insertAfter(item.find('.owl-video'));
@@ -2294,6 +2319,7 @@
 	};
 
 	$.fn.owlCarousel.Constructor.Plugins.Video = Video;
+
 
 	/**
 	 * Creates the animate plugin.
@@ -2356,11 +2382,11 @@
 		this.core.speed(0);
 
 		var left,
-				clear = $.proxy(this.clear, this),
-				previous = this.core.$stage.children().eq(this.previous),
-				next = this.core.$stage.children().eq(this.next),
-				incoming = this.core.settings.animateIn,
-				outgoing = this.core.settings.animateOut;
+			clear = $.proxy(this.clear, this),
+			previous = this.core.$stage.children().eq(this.previous),
+			next = this.core.$stage.children().eq(this.next),
+			incoming = this.core.settings.animateIn,
+			outgoing = this.core.settings.animateOut;
 
 		if (this.core.current() === this.previous) {
 			return;
@@ -2369,23 +2395,23 @@
 		if (outgoing) {
 			left = this.core.coordinates(this.previous) - this.core.coordinates(this.next);
 			previous.one($.support.animation.end, clear)
-					.css( { 'left': left + 'px' } )
-					.addClass('animated owl-animated-out')
-					.addClass(outgoing);
+				.css( { 'left': left + 'px' } )
+				.addClass('animated owl-animated-out')
+				.addClass(outgoing);
 		}
 
 		if (incoming) {
 			next.one($.support.animation.end, clear)
-					.addClass('animated owl-animated-in')
-					.addClass(incoming);
+				.addClass('animated owl-animated-in')
+				.addClass(incoming);
 		}
 	};
 
 	Animate.prototype.clear = function(e) {
 		$(e.target).css( { 'left': '' } )
-				.removeClass('animated owl-animated-out owl-animated-in')
-				.removeClass(this.core.settings.animateIn)
-				.removeClass(this.core.settings.animateOut);
+			.removeClass('animated owl-animated-out owl-animated-in')
+			.removeClass(this.core.settings.animateIn)
+			.removeClass(this.core.settings.animateOut);
 		this.core.onTransitionEnd();
 	};
 
@@ -2405,6 +2431,7 @@
 	};
 
 	$.fn.owlCarousel.Constructor.Plugins.Animate = Animate;
+
 
 	/**
 	 * Creates the autoplay plugin.
@@ -2473,6 +2500,16 @@
 			}, this),
 			'mouseleave.owl.autoplay': $.proxy(function() {
 				if (this._core.settings.autoplayHoverPause && this._core.is('rotating')) {
+					this.play();
+				}
+			}, this),
+			'touchstart.owl.core': $.proxy(function() {
+				if (this._core.settings.autoplayHoverPause && this._core.is('rotating')) {
+					this.pause();
+				}
+			}, this),
+			'touchend.owl.core': $.proxy(function() {
+				if (this._core.settings.autoplayHoverPause) {
 					this.play();
 				}
 			}, this)
@@ -2584,6 +2621,7 @@
 
 	$.fn.owlCarousel.Constructor.Plugins.autoplay = Autoplay;
 
+
 	/**
 	 * Creates the navigation plugin.
 	 * @class The Navigation Plugin
@@ -2651,7 +2689,7 @@
 			'prepared.owl.carousel': $.proxy(function(e) {
 				if (e.namespace && this._core.settings.dotsData) {
 					this._templates.push('<div class="' + this._core.settings.dotClass + '">' +
-							$(e.content).find('[data-dot]').addBack('[data-dot]').attr('data-dot') + '</div>');
+						$(e.content).find('[data-dot]').addBack('[data-dot]').attr('data-dot') + '</div>');
 				}
 			}, this),
 			'added.owl.carousel': $.proxy(function(e) {
@@ -2725,41 +2763,41 @@
 	 */
 	Navigation.prototype.initialize = function() {
 		var override,
-				settings = this._core.settings;
+			settings = this._core.settings;
 
 		// create DOM structure for relative navigation
 		this._controls.$relative = (settings.navContainer ? $(settings.navContainer)
-				: $('<div>').addClass(settings.navContainerClass).appendTo(this.$element)).addClass('disabled');
+			: $('<div>').addClass(settings.navContainerClass).appendTo(this.$element)).addClass('disabled');
 
 		this._controls.$previous = $('<' + settings.navElement + '>')
-				.addClass(settings.navClass[0])
-				.html(settings.navText[0])
-				.prependTo(this._controls.$relative)
-				.on('click', $.proxy(function(e) {
-					this.prev(settings.navSpeed);
-				}, this));
+			.addClass(settings.navClass[0])
+			.html(settings.navText[0])
+			.prependTo(this._controls.$relative)
+			.on('click', $.proxy(function(e) {
+				this.prev(settings.navSpeed);
+			}, this));
 		this._controls.$next = $('<' + settings.navElement + '>')
-				.addClass(settings.navClass[1])
-				.html(settings.navText[1])
-				.appendTo(this._controls.$relative)
-				.on('click', $.proxy(function(e) {
-					this.next(settings.navSpeed);
-				}, this));
+			.addClass(settings.navClass[1])
+			.html(settings.navText[1])
+			.appendTo(this._controls.$relative)
+			.on('click', $.proxy(function(e) {
+				this.next(settings.navSpeed);
+			}, this));
 
 		// create DOM structure for absolute navigation
 		if (!settings.dotsData) {
 			this._templates = [ $('<div>')
-					.addClass(settings.dotClass)
-					.append($('<span>'))
-					.prop('outerHTML') ];
+				.addClass(settings.dotClass)
+				.append($('<span>'))
+				.prop('outerHTML') ];
 		}
 
 		this._controls.$absolute = (settings.dotsContainer ? $(settings.dotsContainer)
-				: $('<div>').addClass(settings.dotsClass).appendTo(this.$element)).addClass('disabled');
+			: $('<div>').addClass(settings.dotsClass).appendTo(this.$element)).addClass('disabled');
 
 		this._controls.$absolute.on('click', 'div', $.proxy(function(e) {
 			var index = $(e.target).parent().is(this._controls.$absolute)
-					? $(e.target).index() : $(e.target).parent().index();
+				? $(e.target).index() : $(e.target).parent().index();
 
 			e.preventDefault();
 
@@ -2799,12 +2837,12 @@
 	 */
 	Navigation.prototype.update = function() {
 		var i, j, k,
-				lower = this._core.clones().length / 2,
-				upper = lower + this._core.items().length,
-				maximum = this._core.maximum(true),
-				settings = this._core.settings,
-				size = settings.center || settings.autoWidth || settings.dotsData
-						? 1 : settings.dotsEach || settings.items;
+			lower = this._core.clones().length / 2,
+			upper = lower + this._core.items().length,
+			maximum = this._core.maximum(true),
+			settings = this._core.settings,
+			size = settings.center || settings.autoWidth || settings.dotsData
+				? 1 : settings.dotsEach || settings.items;
 
 		if (settings.slideBy !== 'page') {
 			settings.slideBy = Math.min(settings.slideBy, settings.items);
@@ -2836,10 +2874,10 @@
 	 */
 	Navigation.prototype.draw = function() {
 		var difference,
-				settings = this._core.settings,
-				disabled = this._core.items().length <= settings.items,
-				index = this._core.relative(this._core.current()),
-				loop = settings.loop || settings.rewind;
+			settings = this._core.settings,
+			disabled = this._core.items().length <= settings.items,
+			index = this._core.relative(this._core.current()),
+			loop = settings.loop || settings.rewind;
 
 		this._controls.$relative.toggleClass('disabled', !settings.nav || disabled);
 
@@ -2878,7 +2916,7 @@
 			index: $.inArray(this.current(), this._pages),
 			count: this._pages.length,
 			size: settings && (settings.center || settings.autoWidth || settings.dotsData
-					? 1 : settings.dotsEach || settings.items)
+				? 1 : settings.dotsEach || settings.items)
 		};
 	};
 
@@ -2901,7 +2939,7 @@
 	 */
 	Navigation.prototype.getPosition = function(successor) {
 		var position, length,
-				settings = this._core.settings;
+			settings = this._core.settings;
 
 		if (settings.slideBy == 'page') {
 			position = $.inArray(this.current(), this._pages);
@@ -2955,6 +2993,7 @@
 
 	$.fn.owlCarousel.Constructor.Plugins.Navigation = Navigation;
 
+
 	/**
 	 * Creates the hash plugin.
 	 * @class The Hash Plugin
@@ -3006,9 +3045,9 @@
 			'changed.owl.carousel': $.proxy(function(e) {
 				if (e.namespace && e.property.name === 'position') {
 					var current = this._core.items(this._core.relative(this._core.current())),
-							hash = $.map(this._hashes, function(item, hash) {
-								return item === current ? hash : null;
-							}).join();
+						hash = $.map(this._hashes, function(item, hash) {
+							return item === current ? hash : null;
+						}).join();
 
 					if (!hash || window.location.hash.slice(1) === hash) {
 						return;
@@ -3028,8 +3067,8 @@
 		// register event listener for hash navigation
 		$(window).on('hashchange.owl.navigation', $.proxy(function(e) {
 			var hash = window.location.hash.substring(1),
-					items = this._core.$stage.children(),
-					position = this._hashes[hash] && items.index(this._hashes[hash]);
+				items = this._core.$stage.children(),
+				position = this._hashes[hash] && items.index(this._hashes[hash]);
 
 			if (position === undefined || position === this._core.current()) {
 				return;
@@ -3066,44 +3105,45 @@
 
 	$.fn.owlCarousel.Constructor.Plugins.Hash = Hash;
 
+
 	var style = $('<support>').get(0).style,
-			prefixes = 'Webkit Moz O ms'.split(' '),
-			events = {
-				transition: {
-					end: {
-						WebkitTransition: 'webkitTransitionEnd',
-						MozTransition: 'transitionend',
-						OTransition: 'oTransitionEnd',
-						transition: 'transitionend'
-					}
-				},
-				animation: {
-					end: {
-						WebkitAnimation: 'webkitAnimationEnd',
-						MozAnimation: 'animationend',
-						OAnimation: 'oAnimationEnd',
-						animation: 'animationend'
-					}
+		prefixes = 'Webkit Moz O ms'.split(' '),
+		events = {
+			transition: {
+				end: {
+					WebkitTransition: 'webkitTransitionEnd',
+					MozTransition: 'transitionend',
+					OTransition: 'oTransitionEnd',
+					transition: 'transitionend'
 				}
 			},
-			tests = {
-				csstransforms: function() {
-					return !!test('transform');
-				},
-				csstransforms3d: function() {
-					return !!test('perspective');
-				},
-				csstransitions: function() {
-					return !!test('transition');
-				},
-				cssanimations: function() {
-					return !!test('animation');
+			animation: {
+				end: {
+					WebkitAnimation: 'webkitAnimationEnd',
+					MozAnimation: 'animationend',
+					OAnimation: 'oAnimationEnd',
+					animation: 'animationend'
 				}
-			};
+			}
+		},
+		tests = {
+			csstransforms: function() {
+				return !!test('transform');
+			},
+			csstransforms3d: function() {
+				return !!test('perspective');
+			},
+			csstransitions: function() {
+				return !!test('transition');
+			},
+			cssanimations: function() {
+				return !!test('animation');
+			}
+		};
 
 	function test(property, prefixed) {
 		var result = false,
-				upper = property.charAt(0).toUpperCase() + property.slice(1);
+			upper = property.charAt(0).toUpperCase() + property.slice(1);
 
 		$.each((property + ' ' + prefixes.join(upper + ' ') + upper).split(' '), function(i, property) {
 			if (style[property] !== undefined) {
