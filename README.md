@@ -1,5 +1,8 @@
 # ClassyLlama OwlCarousel Module for Magento 2
 
+!x This repository is no longer supported or maintained, and has been archived.
+
+
 This package makes the JavaScript library [OwlCarousel](https://github.com/OwlCarousel2/OwlCarousel2) available as an M2 module.
 
 Note that this version of OwlCarousel is UMD compliant per [this fork](https://github.com/classyllama/OwlCarousel2).
